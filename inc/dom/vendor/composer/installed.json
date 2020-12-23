@@ -1,0 +1,52 @@
+{
+    "packages": [
+        {
+            "name": "carica/phpcss",
+            "version": "1.0.2",
+            "version_normalized": "1.0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ThomasWeinert/PhpCss.git",
+                "reference": "f30cce2e4469d87e0d015ee24c28adb453cfd180"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ThomasWeinert/PhpCss/zipball/f30cce2e4469d87e0d015ee24c28adb453cfd180",
+                "reference": "f30cce2e4469d87e0d015ee24c28adb453cfd180",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "time": "2018-06-27T15:14:42+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "PhpCss\\": "src/PhpCss"
+                },
+                "files": [
+                    "src/PhpCss.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Weinert",
+                    "email": "thomas@weinert.info"
+                }
+            ],
+            "description": "An css selector parser and converter",
+            "support": {
+                "issues": "https://github.com/ThomasWeinert/PhpCss/issues",
+                "source": "https://github.com/ThomasWeinert/PhpCss/tree/master"
+            },
+            "install-path": "../carica/phpcss"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
