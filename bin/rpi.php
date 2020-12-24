@@ -95,6 +95,7 @@ foreach ($tags as $tag) {
     }
 }
 var_dump($articles);
+//incorporar o inc/db no inc/mig (standalone)
 //verificar se o md5 do html existe no db
 //salvar o md5 do html no db
 //fazer o parser do html (caso o md5 dele não exist no db)
