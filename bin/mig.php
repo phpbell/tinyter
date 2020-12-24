@@ -8,5 +8,5 @@ $db=$cfg['inc_db'];
 $db=$db($cfg['site_medoo']);
 //regras
 $tableFolder=__DIR__.'/table';
-$mig=require __DIR__.'/../inc/mig/mig.php';
+$mig=$cfg['inc_mig'];
 $mig($db,$tableFolder);

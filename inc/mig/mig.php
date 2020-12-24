@@ -39,8 +39,12 @@ return function($db,$tableFolder){
     $apagarTabelas=array_diff($tables,$migrations);
     //dropar tabelas que não existem nas migrations
     foreach($apagarTabelas as $key=>$value){
-        $db->drop($value);
-        print 'tabela '.$value.' excluida'.PHP_EOL;
+        if($db->drop($value)){
+            print 'tabela '.$value.' excluida'.PHP_EOL;
+            var_dump($db->last());
+        }else{
+            var_dump($db->error());
+        }
     }
     //pegar as colunas das migrations
     foreach ($migrations as $key => $value) {

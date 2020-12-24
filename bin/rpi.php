@@ -68,8 +68,8 @@ foreach ($tags as $tag) {
                 $parsed['day'],
                 $parsed['year']
             );
-            $created_at=date("r",$unix_time);
-            //$created_at=$unix_time;
+            //$created_at=date("r",$unix_time);
+            $created_at=$unix_time;
             //converter a data
             break;
             case 'div':
@@ -87,15 +87,15 @@ foreach ($tags as $tag) {
     if(!is_null($title)){
         $articles[]=[
             'title'=>$title,
-            'created_at'=>$created_at,
+            'original_created_at'=>$created_at,
             'link'=>$link,
-            'image'=>$image
+            'image'=>$image,
+            'created_at'=>time()
         ];
     }
 }
 var_dump($articles);
-//adicionar o bin/mig.php
-//criar a tabela cronlog com o registro do hash do html baixado
+//adicionar tabelas
 //criar a tabela artigos
 //adicionar o inc/db/db.php
 //salvar no banco de dados
