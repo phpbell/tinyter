@@ -95,8 +95,9 @@ foreach ($tags as $tag) {
     }
 }
 var_dump($articles);
-//adicionar tabelas
-//criar a tabela artigos
-//adicionar o inc/db/db.php
-//salvar no banco de dados
+//verificar se o md5 do html existe no db
+//salvar o md5 do html no db
+//fazer o parser do html (caso o md5 dele não exist no db)
+//salvar os artigos no banco de dados (caso eles não existam)
+//exibir os links
 ?>
