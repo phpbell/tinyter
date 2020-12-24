@@ -36,7 +36,7 @@ $mesesEN=[
     'December'
 ];
 //exibir erros
-$cfg['inc_errors']($cfg['site_errors']);//existir erros
+$cfg['inc_errors']($cfg['site_errors']);
 //baixar html
 //$html=$get($url);
 $html=file_get_contents(__DIR__.'/../test_html_rpi.txt');
