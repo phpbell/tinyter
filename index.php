@@ -1,5 +1,7 @@
 <?php
 $cfg=require 'cfg.php';
+$db=$cfg['inc_db']($cfg['site_medoo']);
+$articles=$db->select('articles','*');
 ?>
 <!DOCTYPE html>
 <html lang="<?php print $cfg['site_language']; ?>" dir="ltr">
@@ -23,9 +25,28 @@ $cfg=require 'cfg.php';
         <div class="row">
             <div class="span12">
                 <ul class="nav nav-tabs nav-stacked">
-                    <li>
-                        <a href="#">Exemplo de link</a>
-                    </li>
+                    <?php
+                    if($articles){
+                        foreach ($articles as $article) {
+                            $data=$article['original_created_at'];
+                            $data=date('d/M/Y',$data);
+                            ?>
+                            <li>
+                                <a href="<?php print $article['link']; ?>">
+                                    <small>
+                                        <?php print $data; ?>
+                                    </small><br>
+                                    <b>
+                                        <?php
+                                        print htmlentities($article['title']);
+                                        ?>
+                                    </b>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                    }
+                    ?>
                 </ul>
             </div>
         </div>

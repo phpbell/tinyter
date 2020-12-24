@@ -2,6 +2,7 @@
 //variáveis e requires
 $cfg=require __DIR__.'/../cfg.php';
 $is_cli=$cfg['inc_is_cli'];
+$is_url=$cfg['inc_is_url'];
 $get=$cfg['inc_get'];
 $db=$cfg['inc_db']($cfg['site_medoo']);
 $url='https://www.radioprogresso.com.br/ultimas-noticias/';
@@ -98,15 +99,18 @@ if($db->has('html_hash',$where)){
                 $class=$node->getAttributeNode("class")->value;
                 if($class=='c100 imgfull'){
                     $link=$node->childNodes{1}->getAttributeNode("href")->value;
+                    if(!$is_url($link)){
+                        $link=null;
+                    }
                     $str=$node->childNodes{1}->getAttributeNode("style")->value;
                     $image=explode('\'',$str)[1];
                 }
                 if($class=='c100'){
-                    $title=trim($node->textContent).'<br>';
+                    $title=strip_tags(trim($node->textContent));
                 }
             }
         }
-        if(!is_null($title)){
+        if(!is_null($title) AND !is_null($link)){
             $articles[]=[
                 'title'=>$title,
                 'original_created_at'=>$created_at,
