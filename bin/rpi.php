@@ -1,7 +1,9 @@
 <?php
 //variáveis e requires
 $cfg=require __DIR__.'/../cfg.php';
+$is_cli=$cfg['inc_is_cli'];
 $get=$cfg['inc_get'];
+$db=$cfg['inc_db']($cfg['site_medoo']);
 $url='https://www.radioprogresso.com.br/ultimas-noticias/';
 $html=false;
 $links=false;
@@ -35,70 +37,122 @@ $mesesEN=[
     'November',
     'December'
 ];
+$articles=false;
+$html=$get($url);
+$md5=md5($html);
+
+//modo
+if($is_cli()){
+    system('clear');
+}else{
+    print '<pre>';
+}
+
 //exibir erros
 $cfg['inc_errors']($cfg['site_errors']);
-//baixar html
-//$html=$get($url);
-$html=file_get_contents(__DIR__.'/../test_html_rpi.txt');
-print '<pre>';
-//extrair os as datas, as capas, os links e o títulos
-$tags=$dom($html,$selector);
-$articles=false;
-foreach ($tags as $tag) {
-    $title=null;
-    $created_at=null;
-    $link=null;
-    $image=null;
-    foreach ($tag->childNodes as $node) {
-        switch ($node->localName) {
-            case 'span':
-            $str=$node->textContent;
-            $str=substr($str,0,-1);
-            $str=str_replace(' de ', ' ',$str);
-            $str=str_replace($mesesPT,$mesesEN,$str);
-            date_default_timezone_set("America/Sao_Paulo");
-            //https://www.php.net/manual/pt_BR/function.date.php
-            $str=$str.' 15:00';//em gmt
-            $parsed=date_parse_from_format('d F Y H:i', $str);
-            $unix_time = gmmktime(
-                $parsed['hour'],
-                $parsed['minute'],
-                $parsed['second'],
-                $parsed['month'],
-                $parsed['day'],
-                $parsed['year']
-            );
-            //$created_at=date("r",$unix_time);
-            $created_at=$unix_time;
-            //converter a data
-            break;
-            case 'div':
-            $class=$node->getAttributeNode("class")->value;
-            if($class=='c100 imgfull'){
-                $link=$node->childNodes{1}->getAttributeNode("href")->value;
-                $str=$node->childNodes{1}->getAttributeNode("style")->value;
-                $image=explode('\'',$str)[1];
+
+//verificar se o md5 do html existe no db
+$where=[
+    'md5'=>$md5
+];
+if($db->has('html_hash',$where)){
+    print 'essa página html já foi processada antes'.PHP_EOL;
+}else{
+    //salvar o md5 do html no db
+    $data=[
+        'md5'=>$md5,
+        'created_at'=>time()
+    ];
+    $db->insert("html_hash",$data);
+    //fazer o parser do html e extrair os as datas, as capas, os links e o títulos
+    $tags=$dom($html,$selector);
+    foreach ($tags as $tag) {
+        $title=null;
+        $created_at=null;
+        $link=null;
+        $image=null;
+        foreach ($tag->childNodes as $node) {
+            switch ($node->localName) {
+                case 'span':
+                $str=$node->textContent;
+                $str=substr($str,0,-1);
+                $str=str_replace(' de ', ' ',$str);
+                $str=str_replace($mesesPT,$mesesEN,$str);
+                date_default_timezone_set("America/Sao_Paulo");
+                //https://www.php.net/manual/pt_BR/function.date.php
+                $str=$str.' 15:00';//em gmt
+                $parsed=date_parse_from_format('d F Y H:i', $str);
+                $unix_time = gmmktime(
+                    $parsed['hour'],
+                    $parsed['minute'],
+                    $parsed['second'],
+                    $parsed['month'],
+                    $parsed['day'],
+                    $parsed['year']
+                );
+                //$created_at=date("r",$unix_time);
+                $created_at=$unix_time;
+                //converter a data
+                break;
+                case 'div':
+                $class=$node->getAttributeNode("class")->value;
+                if($class=='c100 imgfull'){
+                    $link=$node->childNodes{1}->getAttributeNode("href")->value;
+                    $str=$node->childNodes{1}->getAttributeNode("style")->value;
+                    $image=explode('\'',$str)[1];
+                }
+                if($class=='c100'){
+                    $title=trim($node->textContent).'<br>';
+                }
             }
-            if($class=='c100'){
-                $title=trim($node->textContent).'<br>';
+        }
+        if(!is_null($title)){
+            $articles[]=[
+                'title'=>$title,
+                'original_created_at'=>$created_at,
+                'link'=>$link,
+                'image'=>$image,
+                'created_at'=>time()
+            ];
+        }
+    }
+}
+if($articles){
+    //salvar o host no banco caso ele não exista
+    $host=parse_url($articles[0]['link'])['host'];
+    $where=[
+        'host'=>$host
+    ];
+    $host_id=$db->get('hosts','id',$where);
+    if(!$host_id){
+        $data=[
+            'host'=>$host,
+            'created_at'=>time()
+        ];
+        if($db->insert('hosts',$data)){
+            $host_id=$db->id();
+        }else{
+            die("erro ao tentar salvar o host no db".PHP_EOL);
+        }
+    }
+    foreach ($articles as $article) {
+        $article['host_id']=$host_id;
+        $where=[
+            'link'=>$article['link']
+        ];
+        $old_article_id=$db->get('articles','id',$where);
+        if($old_article_id){
+            print 'artigo '.$old_article_id.' já existe no db'.PHP_EOL;
+        }else{
+            //salvar os artigos no banco de dados
+            if($db->insert('articles',$article)){
+                print 'artigo '.$db->id().' adicionado ao db'.PHP_EOL;
+            }else{
+                die('erro ao tentar gravar o link no db'.PHP_EOL);
             }
         }
     }
-    if(!is_null($title)){
-        $articles[]=[
-            'title'=>$title,
-            'original_created_at'=>$created_at,
-            'link'=>$link,
-            'image'=>$image,
-            'created_at'=>time()
-        ];
-    }
+}else{
+    print 'nenhum artigo adicionado'.PHP_EOL;
 }
-var_dump($articles);
-//incorporar o inc/db no inc/mig (standalone)
-//verificar se o md5 do html existe no db
-//salvar o md5 do html no db
-//fazer o parser do html (caso o md5 dele não exist no db)
-//salvar os artigos no banco de dados (caso eles não existam)
-//exibir os links
 ?>

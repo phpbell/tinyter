@@ -1,0 +1,2 @@
+# acesso negado
+RewriteRule ^.git/ - [F,L]

@@ -41,8 +41,8 @@ return function($db,$tableFolder){
     foreach($apagarTabelas as $key=>$value){
         if($db->drop($value)){
             print 'tabela '.$value.' excluida'.PHP_EOL;
-            var_dump($db->last());
         }else{
+            print 'erro:'.PHP_EOL;
             var_dump($db->error());
         }
     }
