@@ -72,6 +72,7 @@ if($db->has('html_hash',$where)){
         $created_at=null;
         $link=null;
         $image=null;
+        $image_thumb=null;
         foreach ($tag->childNodes as $node) {
             switch ($node->localName) {
                 case 'span':
@@ -103,7 +104,26 @@ if($db->has('html_hash',$where)){
                         $link=null;
                     }
                     $str=$node->childNodes{1}->getAttributeNode("style")->value;
-                    $image=explode('\'',$str)[1];
+                    $image_url=explode('\'',$str)[1];
+                    $image_url=trim($image_url);
+                    $image=$image_url;
+                    if($is_url($image_url)){
+                        //baixar e salvar thumbs em 100x100
+                        $imageObj=$cfg['inc_image']();
+                        $image_str=$get($image_url);
+                        $image_md5=md5($image_str);
+                        $image_thumb='image/thumb/'.$image_md5.'.jpg';
+                        $filename=__DIR__.'/../'.$image_thumb;
+                        if(!file_exists($filename)){
+                            $temp_file=$cfg['inc_tmp_file']($image_str);
+                            $imageObj->fromFile($temp_file);
+                            $imageObj->thumbnail(100,100,'top');
+                            $imageObj->toFile($filename,'image/jpeg',75);
+                            print 'thumb salva no disco'.PHP_EOL;
+                        }else{
+                            print 'a thumb já existe no disco'.PHP_EOL;
+                        }
+                    }
                 }
                 if($class=='c100'){
                     $title=strip_tags(trim($node->textContent));
@@ -116,7 +136,8 @@ if($db->has('html_hash',$where)){
                 'original_created_at'=>$created_at,
                 'link'=>$link,
                 'image'=>$image,
-                'created_at'=>time()
+                'created_at'=>time(),
+                'image_thumb'=>$image_thumb
             ];
         }
     }

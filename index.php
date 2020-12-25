@@ -11,12 +11,12 @@ $articles=$db->select('articles','*');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" integrity="sha512-dhpxh4AzF050JM736FF+lLVybu28koEYRrSJtTKfA4Z7jKXJNQ5LcxKmHEwruFN2DuOAi9xeKROJ4Z+sttMjqw==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" integrity="sha512-S6hLYzz2hVBjcFOZkAOO+qEkytvbg2k9yZ1oO+zwXNYnQU71syCWhWtIk3UYDvUW2FCIwkzsTcwkEE58EZPnIQ==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?<?php print time(); ?>">
 </head>
 <body>
     <div class="container">
         <div class="row">
-            <div class="span12">
+            <div class="span12 text-center">
                 <h1><?php print $cfg['site_name']; ?></h1>
             </div>
             <!-- span12 -->
@@ -32,15 +32,19 @@ $articles=$db->select('articles','*');
                             $data=date('d/M/Y',$data);
                             ?>
                             <li>
-                                <a href="<?php print $article['link']; ?>">
-                                    <small>
-                                        <?php print $data; ?>
-                                    </small><br>
-                                    <b>
-                                        <?php
-                                        print htmlentities($article['title']);
-                                        ?>
-                                    </b>
+                                <a class="articleLink" href="<?php print $article['link']; ?>">
+                                    <div class="articleThumb" style="background:url('<?php print $article['image_thumb']; ?>')">
+                                    </div>
+                                    <div class="articleMeta">
+                                        <h4>
+                                            <small>
+                                                <?php print $data; ?>
+                                            </small><br>
+                                            <?php
+                                            print htmlentities($article['title']);
+                                            ?>
+                                        </h4>
+                                    </div>
                                 </a>
                             </li>
                             <?php

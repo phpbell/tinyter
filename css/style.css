@@ -1,3 +1,24 @@
 body {
     /* padding-top: 60px; */
 }
+.articleLink{
+    min-height: 100px;
+}
+.articleMeta{
+    display: block;
+    float: left;
+    padding-left: 1em;
+}
+.articleThumb{
+    display: block;
+    float: left;
+    height: 100px;
+    width: 100px;
+}
+.thumb{
+    display: inline-block;
+    float: left;
+    width: 100px;
+    height: 100px;
+    text-align: left;
+}
