@@ -8,7 +8,6 @@ body {
     display: block;
     float: left;
     padding-left: 1em;
-    word-break: break-all;
     max-width: calc(100% - 120px);
 }
 .articleThumb{
@@ -28,4 +27,24 @@ body {
 }
 .nav > li > a:visited{
     color:#555555;
+}
+
+@media (max-width: 481px) {
+    .articleLink{
+        min-height: 200px;
+        vertical-align: middle;
+    }
+    .articleMeta{
+        display: block;
+        float: left;
+        padding-left: 1em;
+        word-wrap: normal;
+        max-width: 100%;
+        padding-bottom: 1em;
+    }
+    .nav > li > a{
+        max-height: inherit;
+        text-align: center;
+        vertical-align: middle;
+    }
 }
