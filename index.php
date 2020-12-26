@@ -32,7 +32,7 @@ $articles=$db->select('articles','*');
                             $data=date('d/M/Y',$data);
                             ?>
                             <li>
-                                <a class="articleLink" href="<?php print $article['link']; ?>">
+                                <a class="articleLink" href="<?php print $article['link']; ?>" title="Clique para abrir">
                                     <div class="articleThumb" style="background:url('<?php print $article['image_thumb']; ?>')">
                                     </div>
                                     <div class="articleMeta">

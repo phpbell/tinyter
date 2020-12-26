@@ -22,3 +22,6 @@ body {
     height: 100px;
     text-align: left;
 }
+.nav > li > a:visited{
+    color:#555555;
+}
