@@ -114,14 +114,14 @@ if($db->has('html_hash',$where)){
                         $image_md5=md5($image_str);
                         $image_thumb='image/thumb/'.$image_md5.'.jpg';
                         $filename=__DIR__.'/../'.$image_thumb;
-                        if(!file_exists($filename)){
+                        if(file_exists($filename)){
+                            print 'a thumb já existe no disco'.PHP_EOL;
+                        }else{
                             $temp_file=$cfg['inc_tmp_file']($image_str);
                             $imageObj->fromFile($temp_file);
                             $imageObj->thumbnail(100,100,'top');
                             $imageObj->toFile($filename,'image/jpeg',75);
                             print 'thumb salva no disco'.PHP_EOL;
-                        }else{
-                            print 'a thumb já existe no disco'.PHP_EOL;
                         }
                     }
                 }
