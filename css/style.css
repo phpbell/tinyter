@@ -8,6 +8,8 @@ body {
     display: block;
     float: left;
     padding-left: 1em;
+    word-break: break-all;
+    max-width: calc(100% - 120px);
 }
 .articleThumb{
     border:1px solid #ddd;

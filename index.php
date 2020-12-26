@@ -1,7 +1,12 @@
 <?php
 $cfg=require 'cfg.php';
 $db=$cfg['inc_db']($cfg['site_medoo']);
-$articles=$db->select('articles','*');
+$where=[
+'ORDER'=>[
+    'original_created_at'=>'DESC'
+    ]
+];
+$articles=$db->select('articles','*',$where);
 ?>
 <!DOCTYPE html>
 <html lang="<?php print $cfg['site_language']; ?>" dir="ltr">
@@ -30,6 +35,7 @@ $articles=$db->select('articles','*');
                     <?php
                     if($articles){
                         foreach ($articles as $article) {
+                            date_default_timezone_set("America/Sao_Paulo");
                             $data=$article['original_created_at'];
                             $data=date('d/M/Y',$data);
                             ?>
