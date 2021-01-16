@@ -41,8 +41,7 @@ $articles=$db->select('articles','*',$where);
                             ?>
                             <li>
                                 <a class="articleLink" href="<?php print $article['link']; ?>" title="Clique para abrir">
-                                    <div class="articleThumb hidden-phone" style="background:url('<?php print $article['image_thumb']; ?>')">
-                                    </div>
+                                    <img class="articleThumb hidden-phone"  src="<?php print $article['image_thumb']; ?>" loading="lazy">
                                     <div class="articleMeta">
                                         <h4>
                                             <small>
