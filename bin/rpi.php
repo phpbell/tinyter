@@ -111,7 +111,10 @@ if($db->has('html_hash',$where)){
                         //baixar e salvar thumbs em 100x100
                         $imageObj=$cfg['inc_image']();
                         // baixa a imagem
-                        $image_str=$get(urldecode($image_url));
+                        $data=[
+                            'ua'=>'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0'
+                        ];
+                        $image_str=$get($image_url,$data);
                         // gera o md5 da imagem
                         $image_md5=md5($image_str);
                         $image_thumb='image/thumb/'.$image_md5.'.jpg';
