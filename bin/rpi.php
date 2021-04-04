@@ -128,6 +128,7 @@ if($db->has('html_hash',$where)){
                             }else{
                                 print $temp_file.' não é uma imagem'.PHP_EOL;
                                 print $image_url.' não é imagem'.PHP_EOL;
+                                print $temp_file.PHP_EOL;
                             }
                         }
                     }
