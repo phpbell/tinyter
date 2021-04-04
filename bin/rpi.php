@@ -118,10 +118,15 @@ if($db->has('html_hash',$where)){
                             print 'a thumb já existe no disco'.PHP_EOL;
                         }else{
                             $temp_file=$cfg['inc_tmp_file']($image_str);
-                            @$imageObj->fromFile($temp_file);
-                            $imageObj->thumbnail(100,100,'top');
-                            $imageObj->toFile($filename,'image/jpeg',75);
-                            print 'thumb salva no disco'.PHP_EOL;
+                            if(exif_imagetype($temp_file)) {
+                                $imageObj->fromFile($temp_file);
+                                $imageObj->thumbnail(100,100,'top');
+                                $imageObj->toFile($filename,'image/jpeg',75);
+                                print 'thumb salva no disco'.PHP_EOL;
+                            }else{
+                                print $temp_file.' não é uma imagem'.PHP_EOL;
+                                print $image_url.' não é imagem'.PHP_EOL;
+                            }
                         }
                     }
                 }
