@@ -111,10 +111,12 @@ if($db->has('html_hash',$where)){
                         //baixar e salvar thumbs em 100x100
                         $imageObj=$cfg['inc_image']();
                         // baixa a imagem
-                        $data=[
-                            'ua'=>'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0'
-                        ];
-                        $image_str=$get($image_url,$data);
+                        $image_str=$get($image_url);
+                        if($image_str=="Sorry, the parameters you provided were not valid"){
+                            $image_url_ii='https://external-content.duckduckgo.com/iu/?u=';
+                            $image_url_ii.=$image_url;
+                            $image_str=$get($image_url_ii);
+                        }
                         // gera o md5 da imagem
                         $image_md5=md5($image_str);
                         $image_thumb='image/thumb/'.$image_md5.'.jpg';
